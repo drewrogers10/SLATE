@@ -1,0 +1,39 @@
+```mermaid
+flowchart TD
+    RA[Requirement Analyst]
+    SA[System Architect]
+    IA[Implementation Agent]
+    CR[Code Reviewer]
+    QA[Quality Assurance Agent]
+    VA[Validator]
+    DEP[Deployment Orchestrator]
+    SEC[Security Agent]
+    DOC[Documentation Agent]
+    MM[Memory Manager]
+    KR[Knowledge Retriever]
+
+    RA --> SA --> IA --> CR --> QA --> VA --> DEP
+
+    RA --> MM
+    SA --> MM
+    IA --> MM
+    QA --> MM
+    VA --> MM
+    SEC --> MM
+    DOC --> MM
+    MM --> IA
+    MM --> QA
+    MM --> DOC
+
+    QA --> DOC
+    CR --> DOC
+
+    SEC --> IA
+    SEC --> DEP
+
+    KR -.-> RA
+    KR -.-> SA
+    KR -.-> IA
+    KR -.-> SEC
+    KR -.-> DOC
+```

@@ -1,0 +1,146 @@
+```mermaid
+flowchart LR
+    %% Solid arrows labelled (mandatory) indicate required interactions.
+    %% Dashed arrows labelled (optional) indicate conditional or as-needed calls.
+
+    subgraph Main_Agents[Main Agents]
+        RA[1 Requirement Analyst]
+        SA[2 System Architect]
+        IA[3 Implementation Agent]
+        CR[5 Code Reviewer]
+        QA[4 Quality Assurance Agent]
+        VA[6 Validator]
+        SEC[7 Security Agent]
+        DOC[8 Documentation Agent]
+        DEP[9 Deployment Orchestrator]
+        MM[10 Memory Manager]
+        KR[11 Knowledge Retriever]
+    end
+
+    subgraph Sub_Agents[Sub Agents]
+        CQ[12 Clarifying Questions]
+        WS[13 Web Search]
+        IS[14 Internal Search]
+        DR[15 Document Retrieval]
+        SUM[16 Summarization]
+        INT[17 Interpreter]
+        REF[18 Reflection]
+        LS[19 Library Search]
+        SA_SUB[20 Static Analysis]
+        VS[21 Vulnerability Scanner]
+        RF[22 Relevance Filter]
+    end
+
+    RA -->|"handoff spec & milestones (mandatory)"| SA
+    RA -->|"share acceptance focus (mandatory)"| QA
+    RA -->|"plan summary (mandatory)"| MM
+    RA -.->|"research request (optional)"| KR
+    RA -.->|"clarifications (optional)"| CQ
+    RA -.->|"executive digest (optional)"| SUM
+    CQ -.->|"answers to spec (optional)"| RA
+
+    SA -->|"module plan (mandatory)"| IA
+    SA -->|"testing hooks (mandatory)"| QA
+    SA -->|"architecture capsule (mandatory)"| MM
+    SA -.->|"scope clarification (optional)"| RA
+    SA -.->|"clarifying questions (optional)"| CQ
+    SA -.->|"risk brief (optional)"| SEC
+    SA -.->|"research request (optional)"| KR
+    SA -.->|"library shortlist (optional)"| LS
+    SA -.->|"exec summary (optional)"| SUM
+
+    MM -->|"task context (mandatory)"| IA
+    IA -->|"status update (mandatory)"| MM
+    IA -->|"code package (mandatory)"| CR
+    IA -.->|"test coordination (optional)"| QA
+    IA -.->|"security flag (optional)"| SEC
+    IA -.->|"research question (optional)"| KR
+    IA -.->|"library request (optional)"| LS
+    IA -.->|"post-failure analysis (optional)"| REF
+    INT -->|"run results (mandatory)"| IA
+    IA -->|"code execution (mandatory)"| INT
+    REF -->|"fix plan (mandatory after request)"| IA
+
+    CR -->|"review report (mandatory)"| MM
+    CR -->|"validated package (mandatory)"| VA
+    CR -->|"static scan request (mandatory)"| SA_SUB
+    SA_SUB -->|"lint & quality findings (mandatory)"| CR
+    CR -.->|"change requests (optional loop)"| IA
+    CR -.->|"security escalation (optional)"| SEC
+    CR -.->|"test feedback (optional)"| QA
+    DOC -->|"doc review request (mandatory)"| CR
+    CR -.->|"tone/style feedback (optional loop)"| DOC
+
+    QA -->|"test suite & instructions (mandatory)"| VA
+    QA -->|"coverage summary (mandatory)"| MM
+    QA -.->|"fixture coordination (optional)"| IA
+    QA -.->|"security test alignment (optional)"| SEC
+    QA -.->|"doc notes (optional)"| DOC
+    QA -.->|"test execution (optional)"| INT
+    INT -->|"run results (optional)"| QA
+
+    VA -->|"validation report (mandatory)"| MM
+    VA -->|"release gate (mandatory)"| DEP
+    VA -.->|"failure logs (optional loop)"| IA
+    VA -.->|"scope sync (optional)"| QA
+    VA -.->|"security findings (optional)"| SEC
+    VA -.->|"rerun suites (optional)"| INT
+    INT -->|"run results (optional)"| VA
+
+    SEC -->|"remediation tasks (mandatory)"| IA
+    SEC -->|"security guidance (mandatory)"| DEP
+    SEC -->|"posture log (mandatory)"| MM
+    SEC -.->|"requirements feedback (optional)"| RA
+    SEC -.->|"architecture feedback (optional)"| SA
+    SEC -.->|"QA security focus (optional)"| QA
+    SEC -.->|"docs updates (optional)"| DOC
+    SEC -.->|"research request (optional)"| KR
+    SEC -.->|"executive summary (optional)"| SUM
+    SEC -->|"scan request (mandatory)"| VS
+    VS -->|"vulnerability report (mandatory)"| SEC
+    SEC -.->|"additional static scan (optional)"| SA_SUB
+
+    DOC -->|"documentation bundle (mandatory)"| MM
+    DOC -->|"release notes & runbooks (mandatory)"| DEP
+    DOC -.->|"accuracy check (optional)"| IA
+    DOC -.->|"qa alignment (optional)"| QA
+    DOC -.->|"security clarifications (optional)"| SEC
+    DOC -.->|"reference request (optional)"| KR
+    DOC -.->|"summary refresh (optional)"| SUM
+
+    DEP -->|"release log (mandatory)"| MM
+    DEP -.->|"deploy coordination (optional)"| IA
+    DEP -.->|"test gating confirmation (optional)"| QA
+    DEP -.->|"security hardening loop (optional)"| SEC
+    DEP -->|"status updates (mandatory)"| DOC
+
+    KR -->|"curated references (mandatory)"| MM
+    MM -->|"indexed research (optional)"| KR
+    KR -->|"targeted research (mandatory)"| RA
+    KR -->|"targeted research (mandatory)"| SA
+    KR -->|"targeted research (mandatory)"| IA
+    KR -->|"targeted research (mandatory)"| SEC
+    KR -->|"targeted research (mandatory)"| DOC
+    KR -.->|"web query (optional)"| WS
+    WS -->|"web findings (mandatory)"| KR
+    KR -.->|"internal lookup (optional)"| IS
+    IS -->|"internal excerpts (mandatory)"| KR
+    KR -.->|"document excerpts (optional)"| DR
+    DR -->|"sourced sections (mandatory)"| KR
+    KR -.->|"library survey (optional)"| LS
+    LS -->|"library matrix (mandatory)"| KR
+    KR -.->|"result curation (optional)"| RF
+    RF -->|"ranked set (mandatory)"| KR
+
+    LS -->|"library options (mandatory after request)"| SA
+    LS -->|"integration guidance (mandatory after request)"| IA
+
+    SUM -->|"curated digest (mandatory after request)"| RA
+    SUM -->|"curated digest (mandatory after request)"| SA
+    SUM -->|"curated digest (mandatory after request)"| SEC
+    SUM -->|"curated digest (mandatory after request)"| DOC
+
+    CQ -.->|"architecture clarifications (optional)"| SA
+
+    
+```
